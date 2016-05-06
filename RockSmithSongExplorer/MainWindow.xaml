@@ -1,0 +1,42 @@
+﻿<Window x:Class="RockSmithSongExplorer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:rs="clr-namespace:RockSmithSongExplorer"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:rstoolkit="clr-namespace:RocksmithToolkitLib.Xml;assembly=RocksmithToolkitLib" 
+        xmlns:vm="clr-namespace:RockSmithSongExplorer.ViewModel"
+        xmlns:c="clr-namespace:RockSmithSongExplorer.Controls"
+        mc:Ignorable="d" 
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel,IsDesignTimeCreatable=false}"
+        
+        Title="RockSmith Song Explorer " Height="750" Width="800" WindowState="Maximized"
+        >
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:SongListingViewModel}">
+            <DataGrid ItemsSource="{Binding Songs}" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" MouseDoubleClick="DataGrid_MouseDoubleClick"></DataGrid>
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm:SongViewModel}">
+            <c:SongView></c:SongView>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="3"></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ContentPresenter Content="{Binding SongListing}"></ContentPresenter>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="3" ResizeDirection="Columns"></GridSplitter>
+        <TabControl Grid.Column="2" ItemsSource="{Binding OpenSongs}" SelectedItem="{Binding SelectedSong, Mode=TwoWay}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>Song</TextBlock>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
+
+
+    </Grid>
+</Window>
