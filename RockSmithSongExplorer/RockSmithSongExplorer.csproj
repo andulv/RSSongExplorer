@@ -109,8 +109,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AwaitableDelegateCommand.cs" />
     <Compile Include="Controls\InfoTabs.xaml.cs">
       <DependentUpon>InfoTabs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SongListingView.xaml.cs">
+      <DependentUpon>SongListingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SongView.xaml.cs">
       <DependentUpon>SongView.xaml</DependentUpon>
@@ -127,6 +131,7 @@
     </Compile>
     <Compile Include="Converter\BoolToOppositeBoolConverter.cs" />
     <Compile Include="IAsyncInitializtion.cs" />
+    <Compile Include="Models\LibraryPath.cs" />
     <Compile Include="Models\RSTrackInfo.cs" />
     <Compile Include="Models\SimplifiedSong.cs" />
     <Compile Include="Services\ArrangementSimplifier.cs" />
@@ -142,6 +147,7 @@
     <Compile Include="Controls\TrackPresenter\RocksmithRenderHelper.cs" />
     <Compile Include="Utils\NonClosingStream.cs" />
     <Compile Include="ViewModel\BusyModel.cs" />
+    <Compile Include="ViewModel\ISongOpener.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\SongListingViewModel.cs" />
     <Compile Include="ViewModel\SongViewModel.cs" />
@@ -154,6 +160,10 @@
     <Compile Include="Services\IDialogService.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="Controls\InfoTabs.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SongListingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

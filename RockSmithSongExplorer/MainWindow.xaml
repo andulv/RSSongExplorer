@@ -14,7 +14,7 @@
         >
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:SongListingViewModel}">
-            <DataGrid ItemsSource="{Binding Songs}" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" MouseDoubleClick="DataGrid_MouseDoubleClick"></DataGrid>
+            <c:SongListingView></c:SongListingView>
         </DataTemplate>
         
         <DataTemplate DataType="{x:Type vm:SongViewModel}">
@@ -32,7 +32,7 @@
         <TabControl Grid.Column="2" ItemsSource="{Binding OpenSongs}" SelectedItem="{Binding SelectedSong, Mode=TwoWay}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock>Song</TextBlock>
+                    <TextBlock Text="{Binding SongInfo.SongName}"></TextBlock>
                 </DataTemplate>
             </TabControl.ItemTemplate>
         </TabControl>

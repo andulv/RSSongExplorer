@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RockSmithSongExplorer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,9 @@ namespace RockSmithSongExplorer.Services
 {
     class SettingsService
     {
-        private IList<string> _libraryFolders;
+        private IList<LibraryPath> _libraryFolders;
 
-        public IList<string> LibraryFolders
+        public IList<LibraryPath> LibraryFolders
         {
             get { return _libraryFolders; }
 //            set { _libraryFolders = value; }
@@ -19,8 +20,8 @@ namespace RockSmithSongExplorer.Services
 
         public SettingsService()
         {
-            _libraryFolders = new List<string>();
-            _libraryFolders.Add(@"c:\Program Files (x86)\Steam\SteamApps\common\Rocksmith2014\dlc");
+            _libraryFolders = new List<LibraryPath>();
+            _libraryFolders.Add(new LibraryPath(@"c:\Program Files (x86)\Steam\SteamApps\common\Rocksmith2014\dlc","*_p.psarc",true));
         }
     }
 }

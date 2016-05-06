@@ -31,59 +31,14 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
+            <c:MultiTrackPresenter Grid.Column="0" MultiTrack="{Binding MultiTrackData}"></c:MultiTrackPresenter>
+
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="3" ResizeDirection="Columns"></GridSplitter>
+
             <GroupBox Header="Arrangement details" Grid.Column="2">
                 <c:InfoTabs></c:InfoTabs>
             </GroupBox>
 
-            <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="3" ResizeDirection="Columns"></GridSplitter>
-            
-            <TabControl Grid.Column="0" SelectedIndex="0">
-                <TabItem Header="Multitrack">
-                    <c:MultiTrackPresenter MultiTrack="{Binding MultiTrackData}"></c:MultiTrackPresenter>
-                </TabItem>
-                <!--<TabItem Header="Singletrack">
-                    <c:TrackPresenter MultiTrack="{Binding MultiTrackData}"></c:TrackPresenter>
-                </TabItem>
-                <TabItem Header="Tab / Sheet">
-                    -->
-                <!--<Grid Grid.Column="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="17*"/>
-                            <ColumnDefinition Width="48*"/>
-                            <ColumnDefinition Width="560*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                        </Grid.RowDefinitions>
-
-                        <ScrollViewer Grid.Row="0" Background="#616362" Name="ScrollViewer" HorizontalScrollBarVisibility="Auto" Grid.ColumnSpan="3">
-                            <Grid Margin="10" Name="TablatureGrid">
-                                -->
-                <!-- A Fancy Drop Shadow Effect -->
-                <!--
-                                <Border VerticalAlignment="Top"  Background="Black" Name="TablatureShadow">
-                                    <Border.Effect>
-                                        <DropShadowEffect BlurRadius="10" ShadowDepth="0" ></DropShadowEffect>
-                                    </Border.Effect>
-                                </Border>
-                                -->
-                <!-- The Background of the tablature -->
-                <!--
-                                <Border VerticalAlignment="Top" Background="#F5F5F5" Name="TablatureContainer">
-                                    -->
-                <!-- The Actual AlphaTab control with a binding to a track -->
-                <!--
-                                    <c:TabControl x:Name="TablatureControl" Track="{Binding CurrentTrack}" RenderFinished="OnRenderFinished" ZoomEnabled="false" />
-                                </Border>
-                            </Grid>
-                        </ScrollViewer>
-
-                        <c:TrackToolbar Grid.Row="1" Grid.ColumnSpan="3"/>
-                    </Grid>-->
-                <!--
-                </TabItem>-->
-            </TabControl>
         </Grid>
 
     </Grid>

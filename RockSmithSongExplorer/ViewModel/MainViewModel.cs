@@ -11,7 +11,7 @@ using System.Windows;
 
 namespace RockSmithSongExplorer.ViewModel
 {
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : ViewModelBase, ISongOpener
     {
 
         readonly ObservableCollection<SongViewModel> _songs = new ObservableCollection<SongViewModel>();
@@ -24,26 +24,43 @@ namespace RockSmithSongExplorer.ViewModel
             set { Set(() => SelectedSong, ref _selectedSong, value); }
         }
 
-        readonly SongListingViewModel _songListing = new SongListingViewModel();
+        readonly SongListingViewModel _songListing;
         public SongListingViewModel SongListing { get { return _songListing; } }
 
         public MainViewModel()
         {
+            _songListing = new SongListingViewModel(this);
             _songs.Add(new SongViewModel(null));
             _selectedSong = _songs[0];
         }
 
-        public void OpenSong(RSSongInfo song)
+        public async Task OpenSongInCurrentTab(RSSongInfo song)
         {
             var vm = new SongViewModel(song);
-            _songs[0] = vm;
+            var idx = OpenSongs.IndexOf(SelectedSong);
+            if (idx == -1)
+                idx = 0;
+            _songs[idx] = vm;
             SelectedSong = vm;
-            vm.Initialization.ContinueWith(t =>
-            {
-                if (t.Exception != null)
-                    MessageBox.Show("Error openining song: \n" + t.Exception.Message);
-            });
+            await vm.Initialization;
         }
+
+        public async Task OpenSongInNewTab(RSSongInfo song)
+        {
+            var vm = new SongViewModel(song);
+            _songs.Add(vm);
+            SelectedSong = vm;
+            await vm.Initialization;
+        }
+
+        public async Task OpenSongInNewWindow(RSSongInfo song)
+        {
+            var vm = new SongViewModel(song);
+            _songs.Add(vm);
+            SelectedSong = vm;
+            await vm.Initialization;
+        }
+
 
     }
 }

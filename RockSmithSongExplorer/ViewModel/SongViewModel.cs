@@ -56,15 +56,21 @@ namespace RockSmithSongExplorer.ViewModel
 
         public SongViewModel(RSSongInfo song)
         {
+            _songInfo = song;
             Initialization = InitASync(song);
         }
 
-        public string SongName {  get { return "SongName"; } }
+        readonly RSSongInfo _songInfo;
+        public RSSongInfo SongInfo
+        {
+            get { return _songInfo; }
+        }
 
         async Task InitASync(RSSongInfo song)
         {
             if (song == null)
                 return;
+
             var fileReader = new ArcFileWrapper(song.ContainerFileName);
             var instArrangements = new List<Song2014>();
             foreach (var track in song.TrackInfos.Where(x => !x.Name.ToLower().StartsWith("vocal")))

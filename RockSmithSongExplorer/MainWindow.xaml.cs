@@ -17,13 +17,5 @@ namespace RockSmithSongExplorer
             InitializeComponent();
             this.Title = this.Title + " - v" + Assembly.GetEntryAssembly().GetName().Version.ToString();
         }
-
-        private void DataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            var vm = this.DataContext as MainViewModel;
-            var dg = sender as DataGrid;
-            vm.OpenSong(dg.SelectedItem as RSSongInfo);
-
-        }
     }
 }
