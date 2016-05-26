@@ -69,16 +69,12 @@ namespace RockSmithSongExplorer.Services
             {
                 Bars = bars,
                 ArrangementName = songArrangement.Arrangement,
-                NumberOfStrings = GetNumberOfStrings(songArrangement),
+                Tuning = (songArrangement.Arrangement.ToLower()=="bass" ? songArrangement.Tuning.ToBassArray() : songArrangement.Tuning.ToArray())
+                        .Select(x => (short)x).ToArray(),
+                Capo = songArrangement.Capo,               
                 ChordTemplates = songArrangement.ChordTemplates.ToList()
             };
             return track;
-        }
-
-        private static int GetNumberOfStrings(Song2014 songArrangement)
-        {
-            bool isBass = songArrangement.Arrangement.ToLower() == "bass";
-            return isBass ? 4 : 6;
         }
     }
 }

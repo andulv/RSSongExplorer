@@ -105,7 +105,8 @@ namespace RockSmithSongExplorer.Controls
 
         private void RenderInstrumentTrack(SimplifiedTrack track, int yOffset)
         {
-            new InstrumentTrackRenderer(this.canvas, track, yOffset, _barHeight, _barWidth).DoRender();
+            new InstrumentTrackRenderer(this.canvas, track, yOffset, _barHeight, _barWidth)
+                .DoRender();
         }
 
         private void RenderVocalTrack(int yOffset)

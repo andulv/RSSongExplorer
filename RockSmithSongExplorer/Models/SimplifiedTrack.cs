@@ -10,8 +10,11 @@ namespace RockSmithSongExplorer.Models
     public class SimplifiedTrack
     {
         public string ArrangementName { get; set; }
-        public int NumberOfStrings { get; set; }
+        public int NumberOfStrings { get { return Tuning==null ? 0 : Tuning.Length; } }
         public List<SimplifiedBar> Bars { get; set; }
+
+        public short[] Tuning { get; set; }
+        public byte Capo { get; set; }
 
         public int GetBarIndex(float time)
         {

@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using RockSmithSongExplorer.Models;
+using RocksmithToolkitLib.Sng2014HSL;
 using RocksmithToolkitLib.Xml;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,8 @@ namespace RockSmithSongExplorer.Controls.TrackPresenter
     public class InstrumentTrackRenderer
     {
         const int _yOffsetStringFromTrackTop = 40;
+        readonly static String[] _notesNames = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+        readonly static String[] _notesNamesHi = new String[] { "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B" };
 
         readonly Canvas _canvas;
         readonly int _yOffset;
@@ -31,6 +34,26 @@ namespace RockSmithSongExplorer.Controls.TrackPresenter
         TimeSpan _prevBarTime = TimeSpan.Zero;
         float _prevBeatMarkerPosition = 0;
         bool _firstBeatMarkerHasBeenAdded = false;
+
+        private static string GetTuningName(TuningStrings tuning, bool isBass, int capo, bool inBem = true)
+        {
+            List<Int32> Notes = new List<Int32>();
+            List<String> NoteNames = new List<String>();
+            for (Byte s = 0; s < (isBass ? 4 : 6); s++)
+                Notes.Add(Sng2014FileWriter.GetMidiNote(tuning.ToShortArray(), s, 0, isBass, capo));
+            foreach (var mNote in Notes)
+                if (inBem) NoteNames.Add(_notesNamesHi[mNote % 12]); //oct = mNote / 12 - 1
+                else NoteNames.Add(_notesNames[mNote % 12]); //oct = mNote / 12 - 1
+
+            return String.Join(" ", NoteNames);
+        }
+
+        private  string GetNoteName(byte stringNo, sbyte fretNo)
+        {
+            var midiNote =Sng2014FileWriter.GetMidiNote(_track.Tuning, stringNo, (byte)fretNo, false, _track.Capo);
+            var noteName = _notesNames[midiNote % 12];
+            return noteName;
+        }
 
         public InstrumentTrackRenderer(Canvas canvas, SimplifiedTrack track, int yOffset, int barHeight, int barWidth)
         {
@@ -114,7 +137,15 @@ namespace RockSmithSongExplorer.Controls.TrackPresenter
             foreach (var note in bar.Notes)
             {
                 RenderSingleNote(bar, xOffset, pixelsPerSec, note);
+
+                var rsChordOffsetFromBarStart = note.Time - bar.StartTime;
+                var noteName = GetNoteName(note.String, note.Fret);
+                var tb = new TextBlock() { Text = noteName, Foreground = Brushes.LightSteelBlue };
+                Canvas.SetLeft(tb, xOffset + (rsChordOffsetFromBarStart * pixelsPerSec));
+                Canvas.SetTop(tb, _yOffset + _barHeight);
+                _canvas.Children.Add(tb);
             }
+
 
             //Draw chords in bar
             foreach (var chord in bar.Chords)
