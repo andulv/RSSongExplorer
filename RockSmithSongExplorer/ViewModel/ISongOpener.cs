@@ -8,5 +8,8 @@ namespace RockSmithSongExplorer.ViewModel
         Task OpenSongInCurrentTab(RSSongInfo song);
         Task OpenSongInNewTab(RSSongInfo song);
         Task OpenSongInNewWindow(RSSongInfo song);
+
+        Task<T> ShowDialog<T>(ICompleteWithResult<T> dialog);
+            
     }
 }

@@ -131,6 +131,7 @@
     </Compile>
     <Compile Include="Converter\BoolToOppositeBoolConverter.cs" />
     <Compile Include="IAsyncInitializtion.cs" />
+    <Compile Include="IComplete.cs" />
     <Compile Include="Models\LibraryPath.cs" />
     <Compile Include="Models\RSTrackInfo.cs" />
     <Compile Include="Models\SimplifiedSong.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Controls\TrackPresenter\RocksmithRenderHelper.cs" />
     <Compile Include="Utils\NonClosingStream.cs" />
     <Compile Include="ViewModel\BusyModel.cs" />
+    <Compile Include="ViewModel\EditLibraryPathViewModel.cs" />
     <Compile Include="ViewModel\ISongOpener.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\SongListingViewModel.cs" />

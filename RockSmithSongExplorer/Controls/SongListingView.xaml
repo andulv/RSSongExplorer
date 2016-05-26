@@ -76,7 +76,35 @@
             </Grid>
         </TabItem>
         <TabItem Header="Folder settings">
-
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                    <ToolBar Grid.Row="0" Margin="4,4,4,4">
+                        <Button>Add new</Button>
+                        <Button>Edit selected</Button>
+                        <Button>Delete selected</Button>
+                    </ToolBar>
+                <DataGrid Grid.Row="1"
+                     ItemsSource="{Binding LibraryPaths}" SelectedItem="{Binding SelectedLibraryPath, Mode=TwoWay}"
+                     AutoGenerateColumns="true"
+                      IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" 
+                      >
+                    <DataGrid.InputBindings>
+                        <MouseBinding  MouseAction="LeftDoubleClick" Command="{Binding OpenSelectedSongCommand}"/>
+                    </DataGrid.InputBindings>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Open in current tab" Command="{Binding OpenSelectedSongCommand}"></MenuItem>
+                            <MenuItem Header="Open in new tab" Command="{Binding OpenSelectedSongCommand}" CommandParameter="tab"></MenuItem>
+                            <MenuItem Header="Open in new window" Command="{Binding OpenSelectedSongCommand}" CommandParameter="window"></MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.Columns>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
         </TabItem>
     </TabControl>
 </UserControl>

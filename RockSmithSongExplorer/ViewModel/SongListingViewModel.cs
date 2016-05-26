@@ -25,6 +25,9 @@ namespace RockSmithSongExplorer.ViewModel
 
         public ICommand ReloadSongListCommand { get; private set; }
         public AwaitableDelegateCommand<string> OpenSelectedSongCommand { get; private set; }
+        public AwaitableDelegateCommand<object> AddNewLibraryPathCommand { get; private set; }
+        public AwaitableDelegateCommand<object> EditSelectedLibraryPathCommand { get; private set; }
+        public RelayCommand DeleteSelectedLibraryPathCommand { get; private set; }
 
         readonly ObservableCollection<RSSongInfo> _songs = new ObservableCollection<RSSongInfo>();
         public ObservableCollection<RSSongInfo> Songs { get { return _songs; } }
@@ -40,22 +43,33 @@ namespace RockSmithSongExplorer.ViewModel
             }
         }
 
-        readonly BusyModel _busyModel;
-        public BusyModel BusyModel
+        LibraryPath _selectedLibraryPath;
+        public LibraryPath SelectedLibraryPath
         {
-            get { return _busyModel; }
+            get { return _selectedLibraryPath; }
+            set
+            {
+                Set(() => SelectedLibraryPath, ref _selectedLibraryPath, value);
+                EditSelectedLibraryPathCommand.RaiseCanExecuteChanged();
+                DeleteSelectedLibraryPathCommand.RaiseCanExecuteChanged();
+            }
         }
 
-        public Task Initialization
-        {
-            get; protected set;
-        }
+        readonly BusyModel _busyModel;
+        public BusyModel BusyModel { get { return _busyModel; } }
+
+        public Task Initialization { get; protected set; }
+
+        public ObservableCollection<LibraryPath> LibraryPaths {  get { return _settingsService.LibraryPaths; } }
 
         public SongListingViewModel(ISongOpener songOpener)
         {
             _songOpener = songOpener;
             ReloadSongListCommand = new AwaitableDelegateCommand(DoLoadSongList,p=>true,ErrorCallback);
-            OpenSelectedSongCommand = new AwaitableDelegateCommand<string>(DoOpenSelectedSong, p => SelectedSong!=null, ErrorCallback);           
+            OpenSelectedSongCommand = new AwaitableDelegateCommand<string>(DoOpenSelectedSong, p => SelectedSong!=null, ErrorCallback);
+            AddNewLibraryPathCommand = new AwaitableDelegateCommand<object>(DoAddNewLibraryPath, p => true, ErrorCallback);
+            EditSelectedLibraryPathCommand = new AwaitableDelegateCommand<object>(DoEditSelectedLibraryPath, p => SelectedLibraryPath != null, ErrorCallback);
+            DeleteSelectedLibraryPathCommand = new RelayCommand(DoDeleteSelectedLibraryPath, () => SelectedLibraryPath != null);
             _busyModel = new BusyModel();
             Initialization = InitAsync();
         }
@@ -83,12 +97,38 @@ namespace RockSmithSongExplorer.ViewModel
                 await _songOpener.OpenSongInCurrentTab(SelectedSong);
         }
 
+        async Task DoSaveSettingsReloadSongList(object parameter)
+        {
+
+        }
+
+        async Task DoAddNewLibraryPath(object parameter)
+        {
+            var vm = new EditLibraryPathViewModel();
+            var result = await _songOpener.ShowDialog(vm);
+            if (result.IsCanceled)
+                return;
+
+            LibraryPaths.Add((LibraryPath)result.DataItem);
+        }
+
+        async Task DoEditSelectedLibraryPath(object parameter)
+        {
+            var vm = new EditLibraryPathViewModel(SelectedLibraryPath);
+            var result = await _songOpener.ShowDialog(vm);
+        }
+
+        void DoDeleteSelectedLibraryPath()
+        {
+
+        }
+
         async Task DoLoadSongList(object parameter)
         {
             using (BusyModel.BeginBusyOperation("Reading files from directories..."))
             {
                 Songs.Clear();
-                foreach (var path in _settingsService.LibraryFolders)
+                foreach (var path in _settingsService.LibraryPaths)
                 {
                     var filter = String.IsNullOrEmpty(path.IncludeFilter) ? "*" : path.IncludeFilter;
                     var files = System.IO.Directory.GetFiles(path.Folder, filter, System.IO.SearchOption.AllDirectories);

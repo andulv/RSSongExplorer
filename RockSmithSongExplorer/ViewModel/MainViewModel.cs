@@ -13,7 +13,6 @@ namespace RockSmithSongExplorer.ViewModel
 {
     public class MainViewModel : ViewModelBase, ISongOpener
     {
-
         readonly ObservableCollection<SongViewModel> _songs = new ObservableCollection<SongViewModel>();
         public ObservableCollection<SongViewModel> OpenSongs { get { return _songs; } }
 
@@ -26,6 +25,13 @@ namespace RockSmithSongExplorer.ViewModel
 
         readonly SongListingViewModel _songListing;
         public SongListingViewModel SongListing { get { return _songListing; } }
+
+        object _activeDialogModel = null;
+        public object ActiveDialogModel
+        {
+            get { return _activeDialogModel; }
+            set { Set(() => ActiveDialogModel, ref _activeDialogModel, value); }
+        }
 
         public MainViewModel()
         {
@@ -61,6 +67,20 @@ namespace RockSmithSongExplorer.ViewModel
             await vm.Initialization;
         }
 
+        readonly Stack<object> _stackedDialogModels = new Stack<object>();
+        public async Task<T> ShowDialog<T>(ICompleteWithResult<T> dialog)
+        {
+            if (ActiveDialogModel != null)
+                _stackedDialogModels.Push(ActiveDialogModel);
+            ActiveDialogModel = dialog;
+
+            var result = await dialog.Completed;
+            if (_stackedDialogModels.Any())
+                ActiveDialogModel = _stackedDialogModels.Pop();
+            else
+                ActiveDialogModel = null;
+            return result;
+        }
 
     }
 }
